@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Welcome to Vue</title>
+  <script src="https://unpkg.com/vue"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.0/css/bulma.css">
+  <style>
+    .my-definitions>.notification {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    .my-definitions>.notification:hover {
+      background-color: #db3052;
+    }
+    
+    .t {
+      background-color: #db3052 !important;
+    }
+    /*.strecher {
+      overflow: hidden;
+      height: 43.1vh;
+    }*/
+    
+    .fade-transition {
+      transition: all 0.8s ease;
+      overflow: hidden;
+      visibility: visible;
+      opacity: 1;
+      position: absolute;
+    }
+    
+    figure>img {
+      max-height: 41.1vh
+    }
+    
+    .fade-enter,
+    .fade-leave {
+      opacity: 0;
+      visibility: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="columns is-gapless is-desktop">
+        <div class="column my-definitions">
+          <div class="columns">
+            <div v-for="number in [currentNumber]" transition="fade" class="column strecher" v-on:mouseover="stopRotation" v-on:mouseout="startRotation">
+              <figure class="image is-3by2">
+                <img :src="images[Math.abs(currentNumber) % images.length]" alt="">
+              </figure>
+
+            </div>
+          </div>
+        </div>
+        <div class="column my-definitions">
+          <div v-for="(n, index) in [0,0,0,0]" :id="index" @click="find(index)" v-bind:class="{t: index == isT}" class="notification is-danger">
+            <a @click="prev">Previous</a> || <a @click="next(index)">Next</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        greeting: 'Welcome to your Vue.js app!',
+        docsURL: 'https://images.pexels.com/photos/457044/pexels-photo-457044.jpeg?w=940&h=650&auto=compress&cs=tinysrgb',
+        gitterURL: 'https://gitter.im/vuejs/vue',
+        forumURL: 'http://forum.vuejs.org/',
+        images: [
+          'http://www.yardforce-tools.com/images/media/img_05.jpg',
+          'https://www.101india.com/sites/default/files/image-upload/blogs/TravelandFood/TheyAllGotHigh/Inline%202%20World%20Weed%20Day.jpg',
+          'https://static1.squarespace.com/static/556df5c3e4b0419b7071907b/t/556e36aae4b0e199a6c61ca1/1433286317909/Image+by+Paige+Overturf+Photography',
+          'http://hipdysplasia.org/wp-content/uploads/2015/11/image-2.png'
+        ],
+        currentNumber: 0,
+        timer: null,
+        isT: 0
+      },
+      ready: function () {
+        this.startRotation();
+      },
+      methods: {
+        humanizeURL: function (url) {
+          return url
+            .replace(/^https?:\/\//, '')
+            .replace(/\/$/, '')
+        },
+
+        startRotation: function () {
+          this.timer = setInterval(this.next, 3000);
+        },
+
+        stopRotation: function () {
+          clearTimeout(this.timer);
+          this.timer = null;
+        },
+        find: function (id) {
+          this.currentNumber = id ;
+        },
+        next: function () {
+          this.currentNumber += 1;
+          if (this.isT < this.images.length - 1) {
+            this.isT++;
+          } else {
+            this.isT = 0;
+          }
+        },
+        prev: function () {
+          this.currentNumber -= 1;
+          if (this.isT > 0) {
+            this.isT--;
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
